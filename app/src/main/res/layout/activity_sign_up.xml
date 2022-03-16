@@ -9,24 +9,95 @@
         android:gravity="center"
         tools:context=".SignUpActivity" android:background="#595959">
     <LinearLayout android:layout_width="match_parent" android:layout_height="0dp"
-                  android:layout_weight="2"/>
+                  android:layout_weight="0.2"/>
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_width="match_parent" android:layout_height="0dp"
             android:layout_weight="1">
         <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-                  android:text="회원가입" android:textSize="25dp"
-                  android:gravity="center"/>
+                  android:text="회원가입" android:textSize="40sp" android:textColorHint="#FFFFFF"
+                  android:textColor="#75FBEE"
+                  android:gravity="center" android:fontFamily="sans-serif-black" android:layout_weight="0"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" android:layout_weight="0.5">
+        <EditText android:id="@+id/emailTextView"
+                  android:layout_width="368dp" android:layout_height="match_parent"
+                  android:layout_weight="1" android:hint="e mail을 입력하세요" android:textColorHint="#C6C2C2"
+                  android:layout_marginLeft="20dp" android:layout_marginRight="10dp" android:paddingTop="5dp"
+                  android:paddingBottom="5dp"/>
+        <Button
+                android:text="인증"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:id="@+id/checkBtn" android:layout_weight="1"
+                android:layout_marginRight="10dp" android:backgroundTint="#323232"/>
     </LinearLayout>
     <LinearLayout android:layout_width="match_parent" android:layout_height="0dp"
-                  android:layout_weight="2" android:orientation="vertical">
-        <EditText android:id="@+id/emailTextView"
-                  android:layout_width="match_parent" android:layout_height="0dp"
-                  android:layout_weight="1"/>
+                  android:layout_weight="1" android:orientation="vertical">
         <EditText android:id="@+id/passwordTextView"
                   android:layout_width="match_parent" android:layout_height="0dp"
-                  android:layout_weight="1"/>
+                  android:layout_weight="1" android:hint="비밀번호를 입력하세요" android:textColorHint="#C6C2C2"
+                  android:layout_marginLeft="20dp" android:layout_marginRight="20dp" android:paddingTop="5dp"
+                  android:paddingBottom="5dp"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/passwordTextView2" android:layout_weight="1" android:hint="비밀번호 확인"
+                android:textColorHint="#C6C2C2" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"
+                android:paddingTop="5dp" android:paddingBottom="5dp"/>
     </LinearLayout>
     <LinearLayout android:layout_width="match_parent" android:layout_height="0dp"
-                  android:layout_weight="2"/>
+                  android:orientation="vertical" android:layout_weight="0.5">
+        <TextView
+                android:text="성별"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/textView" android:textColor="#FFFFFF"
+                android:textSize="18dp" android:layout_marginLeft="20dp" android:layout_marginRight="20dp"
+                android:paddingLeft="10dp" android:paddingTop="5dp" android:paddingBottom="5dp"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:layout_marginRight="20dp">
+            <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:orientation="horizontal" android:id="@+id/genderGroup">
+                <RadioButton
+                        android:text="남자"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:id="@+id/manBtn" android:layout_weight="1"
+                        android:textColorLink="#FFFEFE" android:textColor="#FFFEFE" android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
+                <RadioButton
+                        android:text="여자"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:id="@+id/womenBtn" android:layout_weight="1"
+                        android:textColorLink="#FFFEFE" android:textColor="#FFFEFE" android:paddingTop="5dp"
+                        android:paddingBottom="5dp"/>
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" android:layout_weight="0.5">
+        <EditText android:id="@+id/nickNameTextView"
+                  android:layout_width="368dp" android:layout_height="match_parent"
+                  android:layout_weight="1" android:hint="별명을 입력하세요" android:textColorHint="#C6C2C2"
+                  android:layout_marginLeft="20dp" android:layout_marginRight="10dp" android:paddingTop="5dp"
+                  android:paddingBottom="5dp"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="20dp">
+        <Button
+                android:text="회원가입"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/doSignUpBtn" android:backgroundTint="#323232"
+                android:layout_marginLeft="20dp" android:layout_marginRight="20dp"/>
+    </LinearLayout>
 </LinearLayout>
