@@ -13,6 +13,12 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.FrontApp">
         <activity
+                android:name=".SelectActivity"
+                android:exported="true"/>
+        <activity
+                android:name=".CaptureActivity"
+                android:exported="true"/>
+        <activity
                 android:name=".SignUpActivity"
                 android:exported="true"/>
         <activity

@@ -1,0 +1,171 @@
+package com.example.frontapp;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+
+public class SelectActivity extends AppCompatActivity {
+    private static final String TAG = "SelectActivity";
+    private static final int VIDEO_FILE_REQUEST = 101;
+    Button uploadBtn;
+    ImageView imageView;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_select);
+
+        uploadBtn = (Button)findViewById(R.id.uploadBtn);
+        imageView = (ImageView)findViewById(R.id.imageView);
+
+        uploadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getVideo();
+            }
+        });
+    }
+
+    private void getVideo() {
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                //권한 요청 성공
+                //갤러리 동영상 호출
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Video.Media.CONTENT_TYPE);
+                startActivityForResult(intent, VIDEO_FILE_REQUEST);
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Log.d(TAG, "onPermissionDenied:");
+                Toast.makeText(SelectActivity.this, "권한요청실패", Toast.LENGTH_SHORT);
+            }
+
+        };
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage("[설정] > [권한] 에서 권한을 허용할 수 있습니다.")
+                .setDeniedMessage("동영상 및 파일을 저장하기 위하여 접근 권한이 필요합니다.")
+                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
+    }
+
+    public static Bitmap createThumbnail(Context activity, String path) {
+        MediaMetadataRetriever mediaMetadataRetriever = null;
+        Bitmap bitmap = null;
+        try {
+            mediaMetadataRetriever = new MediaMetadataRetriever();
+            mediaMetadataRetriever.setDataSource(activity, Uri.parse(path));
+
+            bitmap = mediaMetadataRetriever.getFrameAtTime(1000000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(mediaMetadataRetriever != null) {
+                mediaMetadataRetriever.release();
+            }
+        }
+
+        return bitmap;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == VIDEO_FILE_REQUEST && resultCode == RESULT_OK) {
+            Uri videoUri = data.getData();
+
+            imageView.setImageBitmap(createThumbnail(SelectActivity.this, videoUri.toString()));
+        }
+    }
+
+
+
+
+/*
+    //권한에 대한 응답이 있으면 작동하는 함수
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == 1) {
+            int length = permissions.length;
+            for(int i = 0; i < length; i++) {
+                if(grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    //동의
+                    Log.d("MainActivity", "권한 허용 : " + permissions[i]);
+                }
+            }
+        }
+    }
+
+    public void checkSelfPermission() {
+        String temp = "";
+
+        //파일 읽기 권한 확인
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp += Manifest.permission.READ_EXTERNAL_STORAGE + " ";
+        }
+
+        //파일 쓰기 권한 확인
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " ";
+        }
+
+        if(TextUtils.isEmpty(temp) == false) {
+            //권한 요청
+            ActivityCompat.requestPermissions(this, temp.trim().split(" "), 1);
+        }
+        else {
+            Toast.makeText(this, "권한을 모두 허용", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 101 && resultCode == RESULT_OK) {
+            try {
+                InputStream is = getContentResolver().openInputStream(data.getData());
+                Bitmap bm = BitmapFactory.decodeStream(is);
+                is.close();
+                imageView.setImageBitmap(bm);
+            } catch(Exception e) {
+                 e.printStackTrace();
+            }
+        }
+        else if(requestCode == 101 && resultCode == RESULT_CANCELED) {
+            Toast.makeText(this, "취소", Toast.LENGTH_SHORT).show();
+        }
+    }*/
+
+
+}
