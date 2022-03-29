@@ -25,7 +25,7 @@
             android:layout_height="0dp" android:layout_weight="0.5">
         <EditText android:id="@+id/emailTextView"
                   android:layout_width="368dp" android:layout_height="match_parent"
-                  android:layout_weight="1" android:hint="e mail을 입력하세요" android:textColorHint="#C6C2C2"
+                  android:layout_weight="1" android:hint="email을 입력하세요" android:textColorHint="#C6C2C2"
                   android:layout_marginLeft="20dp" android:layout_marginRight="10dp" android:paddingTop="5dp"
                   android:paddingBottom="5dp"/>
         <Button

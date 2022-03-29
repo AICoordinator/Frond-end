@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.viewpager.widget.ViewPager;
 
 public class PageActivity extends AppCompatActivity {
     public ImageView imageView;
