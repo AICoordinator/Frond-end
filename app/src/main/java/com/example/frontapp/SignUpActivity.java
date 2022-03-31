@@ -8,16 +8,22 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 public class SignUpActivity extends AppCompatActivity {
     Button signUp;
     EditText emailTextView, passwordTextView, nickNameTextView;
     RadioGroup genderGroup;
-    ServiceApi serviceApi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,29 +49,49 @@ public class SignUpActivity extends AppCompatActivity {
                     gender = true;
                 else
                     gender = false;
-                startJoin(new User(email, password, gender, nickname));
+
+                /*HashMap<String, Object> input = new HashMap<>();
+                input.put("email", email);
+                input.put("gender", gender);
+                input.put("nickname", nickname);*/
+
+                //POST
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://0b42-59-15-25-132.ngrok.io/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                //Intercepter
+                OkHttpClient client = new OkHttpClient().newBuilder().addInterceptor( new Interceptor() {
+                    @Override
+                    public okhttp3.Response intercept(Chain chain) throws IOException {
+                        return null;
+                    }
+                }).build();
+
+                ServiceApi serviceApi = retrofit.create(ServiceApi.class);
+                User data = new User(email, password, gender, nickname);
+                serviceApi.postData(data).enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if(response.isSuccessful()) {
+                            System.out.println("POST Success");
+                            User data = response.body();
+                            Log.d("TEST", "POST 성공");
+                            Log.d("TEST", data.getEmail());
+                        }
+                        else {
+                            Log.d("TEST", "POST Failed");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Log.d("FAIL", t.getMessage());
+                    }
+                });
             }
         });
     }
 
-    private void startJoin(User data) {
-        Retrofit retrofit = RetrofitClient.getClient();
-        serviceApi = retrofit.create(ServiceApi.class);
-        serviceApi.userJoin(data).enqueue(new Callback<SignUpResponse>() {
-            @Override
-            public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
-                SignUpResponse result = response.body();
-                Toast.makeText(SignUpActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
-                if(result.getStatus() == 200)
-                    finish();
-            }
-
-            @Override
-            public void onFailure(Call<SignUpResponse> call, Throwable t) {
-                Toast.makeText(SignUpActivity.this, "Sign up Error", Toast.LENGTH_SHORT).show();
-                Log.e("Sign up Error", t.getMessage());
-                t.printStackTrace();
-            }
-        });
-    }
 }

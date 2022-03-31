@@ -1,12 +1,17 @@
 package com.example.frontapp;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.Headers;
-import retrofit2.http.POST;
+import retrofit2.Retrofit;
+import retrofit2.http.*;
+
+import java.util.HashMap;
+import java.util.List;
 
 public interface ServiceApi {
-    @Headers({"Content-Type : application/json"})
+    @GET("/user/signup")
+    Call<List<User>> getData(@Query("email") String id);
+
     @POST("/user/signup")
-    Call<SignUpResponse> userJoin(@Body User data);
+    Call<User> postData(@Body User data);
+
 }
