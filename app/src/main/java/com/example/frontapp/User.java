@@ -10,7 +10,7 @@ public class User {
     private String password;
 
     @SerializedName("gender")
-    private Boolean gender;
+    private int gender;
 
     @SerializedName("nickname")
     private String nickname;
@@ -19,8 +19,8 @@ public class User {
         return password;
     }
 
-    public void setPassWord(String passWord) {
-        this.password = passWord;
+    public void setPassWord(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -31,11 +31,11 @@ public class User {
         this.email = email;
     }
 
-    public Boolean getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(Boolean gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 
@@ -47,7 +47,7 @@ public class User {
         this.nickname = nickname;
     }
 
-    public User(String email, String password, Boolean gender, String nickname) {
+    public User(String email, String password, int gender, String nickname) {
         this.email = email;
         this.password = password;
         this.gender = gender;

@@ -8,10 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface ServiceApi {
-    @GET("/user/signup")
-    Call<List<User>> getData(@Query("email") String id);
-
+    @FormUrlEncoded
     @POST("/user/signup")
-    Call<User> postData(@Body User data);
+    Call<User> postData(@FieldMap HashMap<String, Object> data);
 
 }

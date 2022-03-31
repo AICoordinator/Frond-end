@@ -43,17 +43,18 @@ public class SignUpActivity extends AppCompatActivity {
                 String email = emailTextView.getText().toString();
                 String password = passwordTextView.getText().toString();
                 String nickname = nickNameTextView.getText().toString();
-                boolean gender;
+                int gender;
                 int id = genderGroup.getCheckedRadioButtonId();
                 if(id == R.id.manBtn)
-                    gender = true;
+                    gender = 1;
                 else
-                    gender = false;
+                    gender = 0;
 
-                /*HashMap<String, Object> input = new HashMap<>();
+                HashMap<String, Object> input = new HashMap<>();
                 input.put("email", email);
                 input.put("gender", gender);
-                input.put("nickname", nickname);*/
+                input.put("nickname", nickname);
+                input.put("password", password);
 
                 //POST
                 Retrofit retrofit = new Retrofit.Builder()
@@ -71,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 ServiceApi serviceApi = retrofit.create(ServiceApi.class);
                 User data = new User(email, password, gender, nickname);
-                serviceApi.postData(data).enqueue(new Callback<User>() {
+                serviceApi.postData(input).enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if(response.isSuccessful()) {
