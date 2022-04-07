@@ -8,6 +8,7 @@ import android.widget.RadioGroup;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.example.frontapp.UserData.User;
+import com.example.frontapp.RetrofitClient;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -23,6 +24,7 @@ public class SignUpActivity extends AppCompatActivity {
     Button signUp;
     EditText emailTextView, passwordTextView, nickNameTextView;
     RadioGroup genderGroup;
+    RetrofitClient retrofitClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,21 +58,9 @@ public class SignUpActivity extends AppCompatActivity {
                 input.put("password", password);
 
                 //POST
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://2e6c-59-15-25-132.ngrok.io/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                //Intercepter
-                OkHttpClient client = new OkHttpClient().newBuilder().addInterceptor( new Interceptor() {
-                    @Override
-                    public okhttp3.Response intercept(Chain chain) throws IOException {
-                        return null;
-                    }
-                }).build();
-
-                ServiceApi serviceApi = retrofit.create(ServiceApi.class);
-                User data = new User(email, password, gender, nickname);
+                retrofitClient = RetrofitClient.getInstance();
+                ServiceApi serviceApi = RetrofitClient.getRetrofitInterface();
+                //User data = new User(email, password, gender, nickname);
                 serviceApi.postData(input).enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {

@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
-    private final String BASE_URL = "http://0d9b-220-76-170-93.ngrok.io";
+    private final String BASE_URL = "http://7d9d-59-15-25-132.ngrok.io";
     private ServiceApi myApi;
     private EditText emailTextView,passwordTextView;
 
