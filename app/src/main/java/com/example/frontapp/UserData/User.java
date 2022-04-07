@@ -1,4 +1,4 @@
-package com.example.frontapp;
+package com.example.frontapp.UserData;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -14,6 +14,9 @@ public class User {
 
     @SerializedName("nickname")
     private String nickname;
+
+    @SerializedName("Token")
+    private String token;
 
     public String getPassWord() {
         return password;
@@ -47,10 +50,20 @@ public class User {
         this.nickname = nickname;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public User(String email, String password, int gender, String nickname) {
         this.email = email;
         this.password = password;
         this.gender = gender;
         this.nickname = nickname;
     }
+
+
 }
