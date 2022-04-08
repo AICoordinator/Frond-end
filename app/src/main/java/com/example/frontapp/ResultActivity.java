@@ -1,5 +1,7 @@
 package com.example.frontapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -11,31 +13,21 @@ public class ResultActivity extends AppCompatActivity {
 
     private ViewPager pager;
     private PageAdapter pagerAdapter;
-
+    Uri videoUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+
+        //Video Uri 불러오기
+        Intent getVideo = getIntent();
+        videoUri = Uri.parse(getVideo.getStringExtra("videoUri"));
+
+        //View Pager 적용
         pager = (ViewPager)findViewById(R.id.pager_images);
-
-        pager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(this.getClass().getName(), "ResultActivity did");
-            }
-        });
-
         pagerAdapter = new PageAdapter(this);
         pager.setAdapter(pagerAdapter);
-
-        TextView txt = (TextView)findViewById(R.id.countNum);
-        txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(this.getClass().getName(), "touchview touched");
-            }
-        });
     }
 
 

@@ -16,7 +16,19 @@
 
     <Button android:id="@+id/uploadBtn" android:layout_width="match_parent" android:layout_height="0dp"
             android:layout_weight="1" android:text="동영상 선택하기"
-            android:layout_margin="100dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#323232" android:hapticFeedbackEnabled="false"
+    />
+
+    <Button android:id="@+id/sendBtn" android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:text="선택 완료"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"
             android:backgroundTint="#323232" android:hapticFeedbackEnabled="false"
     />
 

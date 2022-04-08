@@ -30,8 +30,9 @@ import java.util.ArrayList;
 public class SelectActivity extends AppCompatActivity {
     private static final String TAG = "SelectActivity";
     private static final int VIDEO_FILE_REQUEST = 101;
-    Button uploadBtn;
+    Button uploadBtn, sendBtn;
     ImageView imageView;
+    Uri selectedVideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +41,28 @@ public class SelectActivity extends AppCompatActivity {
 
         uploadBtn = (Button)findViewById(R.id.uploadBtn);
         imageView = (ImageView)findViewById(R.id.imageView);
+        sendBtn = (Button)findViewById(R.id.sendBtn);
 
+        //업로드 버튼
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getVideo();
             }
         });
+
+        //전송 버튼
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), LoadingActivity.class);
+                intent.putExtra("videoUri", selectedVideo.toString());
+                startActivity(intent);
+            }
+        });
     }
 
+    //동영상 불러오기
     private void getVideo() {
         PermissionListener permissionListener = new PermissionListener() {
             @Override
@@ -101,7 +115,7 @@ public class SelectActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == VIDEO_FILE_REQUEST && resultCode == RESULT_OK) {
             Uri videoUri = data.getData();
-
+            selectedVideo = data.getData();
             imageView.setImageBitmap(createThumbnail(SelectActivity.this, videoUri.toString()));
         }
     }
