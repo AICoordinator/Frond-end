@@ -11,15 +11,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.frontapp.UserData.User;
 import okhttp3.*;
 import okio.BufferedSink;
 import okio.Okio;
+import retrofit2.Call;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class LoadingActivity extends AppCompatActivity {
+
+    RetrofitClient retrofitClient;
+    ServiceApi serviceApi;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +45,64 @@ public class LoadingActivity extends AppCompatActivity {
         Log.d("VIDEO STRING : ", videoStr);
         Uri videoUri = Uri.parse(videoStr);
 
+        //서버 접근 api선언
+        retrofitClient = RetrofitClient.getInstance();
+        serviceApi = RetrofitClient.getRetrofitInterface();
 
-        class sendDataToHttp extends AsyncTask<Void, Void, String> {
+        //동영상 불러오기
+        ContentResolver contentResolver = this.getApplicationContext().getContentResolver();
+        String contentType = contentResolver.getType(videoUri);
+        final AssetFileDescriptor fd;
+        try {
+            fd = contentResolver.openAssetFileDescriptor(videoUri, "r");
+            if (fd == null) { //file open 실피
+                throw new FileNotFoundException("could not open file descriptor");
+            }
+
+            RequestBody videoFile = new RequestBody() {
+                @Override
+                public long contentLength() {
+                    return fd.getDeclaredLength();
+                }
+
+                @Override
+                public MediaType contentType() {
+                    return MediaType.parse(contentType);
+                }
+
+                @Override
+                public void writeTo(BufferedSink sink) throws IOException {
+                    try (InputStream is = fd.createInputStream()) {
+                        sink.writeAll(Okio.buffer(Okio.source(is)));
+                    }
+                }
+            };
+
+            serviceApi.sendVideo(videoFile).enqueue(new retrofit2.Callback<User>() {
+                @Override
+                public void onResponse(retrofit2.Call<User> call, retrofit2.Response<User> response) {
+                    if(response.isSuccessful()) {
+                        System.out.println("POST Success");
+                        User data = response.body();
+                        Log.d("TEST", "POST 성공");
+                        Log.d("TEST", data.getEmail());
+                    }
+                    else {
+                        Log.d("TEST", "POST Failed");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Log.d("FAIL", t.getMessage());
+                }
+            });
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+       /* class sendDataToHttp extends AsyncTask<Void, Void, String> {
             String serverUrl = RetrofitClient.getBaseUrl();
             OkHttpClient client = new OkHttpClient();
             Context context;
@@ -127,7 +188,7 @@ public class LoadingActivity extends AppCompatActivity {
         }
 
         sendDataToHttp sendData = new sendDataToHttp(this);
-        sendData.execute();
+        sendData.execute();*/
 
 
         //Dialog 종료

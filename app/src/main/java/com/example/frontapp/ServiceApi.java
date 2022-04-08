@@ -1,6 +1,7 @@
 package com.example.frontapp;
 
 import com.example.frontapp.UserData.User;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -13,4 +14,8 @@ public interface ServiceApi {
 
     @POST("/user/login")
     Call<User> loginServer(@Body User user);
+
+    @Multipart
+    @PUT("/result")
+    Call<User> sendVideo(@Part("video") RequestBody video);
 }
