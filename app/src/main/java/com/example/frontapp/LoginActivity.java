@@ -1,5 +1,6 @@
 package com.example.frontapp;
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.example.frontapp.UserData.User;
+import com.example.frontapp.UserData.UserDataRepository;
 import com.example.frontapp.UserData.loginRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private RetrofitClient retrofitClient;
     private EditText emailTextView,passwordTextView;
     private SharedPreferences loginData;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         emailTextView = findViewById(R.id.emailTextView);
         passwordTextView = findViewById(R.id.passwordTextView);
+
+        mContext = this;
 
         Button signUpBtn = (Button)findViewById(R.id.signUpBtn);
         signUpBtn.setOnClickListener(new Button.OnClickListener() {
@@ -39,21 +44,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginData = getSharedPreferences("UserLoginData", MODE_PRIVATE);
-        boolean isLogined = loginData.getBoolean("isLogined", false);
-        if(isLogined)
-        {
-            String email = loginData.getString("email", null);
-            String password = loginData.getString("password",null);
-            emailTextView.setText(email);
-            passwordTextView.setText(password);
-        }
+            String email = UserDataRepository.getStringData(mContext,"email");
+            String password = UserDataRepository.getStringData(mContext,"password");
+            if(email != null && password != null) {
+                emailTextView.setText(email);
+                passwordTextView.setText(password);
+            }
 
         Button loginBtn  = (Button)findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(new  Button.OnClickListener(){
             @Override
             public void onClick(View view) {
-
                 String email = emailTextView.getText().toString();
                 String password = passwordTextView.getText().toString();
                 loginRequest loginrequest = new loginRequest(email,password);
@@ -67,10 +68,10 @@ public class LoginActivity extends AppCompatActivity {
                         if(response.isSuccessful()) {
                             System.out.println("POST Success");
                             User data = response.body();
-                            putData(data,password);
+                            if(data != null)
+                                UserDataRepository.setAllUserData(mContext,data,password);
                             Log.d("TEST", "POST 성공");
                             Log.d("TEST", data.getToken());
-                            //사진 선택하는 화면으로 넘어감
                             Intent intent = new Intent(getApplicationContext(), SelectActivity.class);
                             startActivity(intent);
                         }
@@ -90,13 +91,5 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void putData(User data, String password)
-    {
-        SharedPreferences.Editor editor = loginData.edit();
-        editor.putString("email",data.getEmail());
-        editor.putString("password",password);
-        editor.putString("token",data.getToken());
-        editor.putString("nickname",data.getNickname());
-        editor.commit();
-    }
+
 }

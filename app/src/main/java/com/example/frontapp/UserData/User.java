@@ -3,7 +3,6 @@ package com.example.frontapp.UserData;
 import com.google.gson.annotations.SerializedName;
 
 public class User {
-    public static boolean isLogined = false;
     @SerializedName("email")
     private String email;
 
@@ -48,11 +47,11 @@ public class User {
         this.token = token;
     }
 
-    public User(String email, String token, int gender, String nickname) {
+    public User(String email,int gender, String nickname,String token) {
         this.email = email;
-        this.token = token;
         this.gender = gender;
         this.nickname = nickname;
+        this.token = token;
     }
 
 

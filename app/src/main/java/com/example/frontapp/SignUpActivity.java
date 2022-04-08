@@ -1,5 +1,6 @@
 package com.example.frontapp;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.example.frontapp.UserData.User;
 import com.example.frontapp.RetrofitClient;
+import com.example.frontapp.UserData.UserDataRepository;
 import com.example.frontapp.UserData.signUpRequest;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -28,11 +30,13 @@ public class SignUpActivity extends AppCompatActivity {
     RadioGroup genderGroup;
     RetrofitClient retrofitClient;
     private SharedPreferences loginData;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        mContext = this;
 
         //view 아이디 연결
         signUp = findViewById(R.id.doSignUpBtn);
@@ -54,25 +58,18 @@ public class SignUpActivity extends AppCompatActivity {
                     gender = 1;
                 else
                     gender = 0;
-
-                HashMap<String, Object> input = new HashMap<>();
-                input.put("email", email);
-                input.put("gender", gender);
-                input.put("nickname", nickname);
-                input.put("password", password);
-
                 signUpRequest signUpRequest = new signUpRequest(email,password,gender,nickname);
                 //POST
                 retrofitClient = RetrofitClient.getInstance();
                 ServiceApi serviceApi = RetrofitClient.getRetrofitInterface();
-                //User data = new User(email, password, gender, nickname);
                 serviceApi.postData(signUpRequest).enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if(response.isSuccessful()) {
                             System.out.println("POST Success");
                             User data = response.body();
-                            putData(data,password);
+                            if(data != null)
+                                UserDataRepository.setAllUserData(mContext,data,password);
                             Log.d("TEST", "POST 성공");
                             Log.d("TEST", data.getEmail());
                         }
@@ -88,18 +85,6 @@ public class SignUpActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    private void putData(User data, String password)
-    {
-        loginData = getSharedPreferences("UserLoginData", MODE_PRIVATE);;
-        SharedPreferences.Editor editor = loginData.edit();
-        editor.putString("email",data.getEmail());
-        editor.putString("password",password);
-        editor.putBoolean("isLogined",true);
-        editor.putString("token",data.getToken());
-        editor.putString("nickname",data.getNickname());
-        editor.commit();
     }
 
 }
