@@ -18,6 +18,7 @@ public class RetrofitClient {
         return baseUrl;
     }
 
+
     private RetrofitClient() {
         //Intercepter 미완성 연결 안됨
         OkHttpClient client = new OkHttpClient().newBuilder().addInterceptor( new Interceptor() {

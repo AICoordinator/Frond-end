@@ -1,5 +1,6 @@
 package com.example.frontapp;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.example.frontapp.UserData.User;
 import com.example.frontapp.RetrofitClient;
+import com.example.frontapp.UserData.signUpRequest;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -25,6 +27,8 @@ public class SignUpActivity extends AppCompatActivity {
     EditText emailTextView, passwordTextView, nickNameTextView;
     RadioGroup genderGroup;
     RetrofitClient retrofitClient;
+    private SharedPreferences loginData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,16 +61,18 @@ public class SignUpActivity extends AppCompatActivity {
                 input.put("nickname", nickname);
                 input.put("password", password);
 
+                signUpRequest signUpRequest = new signUpRequest(email,password,gender,nickname);
                 //POST
                 retrofitClient = RetrofitClient.getInstance();
                 ServiceApi serviceApi = RetrofitClient.getRetrofitInterface();
                 //User data = new User(email, password, gender, nickname);
-                serviceApi.postData(input).enqueue(new Callback<User>() {
+                serviceApi.postData(signUpRequest).enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if(response.isSuccessful()) {
                             System.out.println("POST Success");
                             User data = response.body();
+                            putData(data,password);
                             Log.d("TEST", "POST 성공");
                             Log.d("TEST", data.getEmail());
                         }
@@ -82,6 +88,18 @@ public class SignUpActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void putData(User data, String password)
+    {
+        loginData = getSharedPreferences("UserLoginData", MODE_PRIVATE);;
+        SharedPreferences.Editor editor = loginData.edit();
+        editor.putString("email",data.getEmail());
+        editor.putString("password",password);
+        editor.putBoolean("isLogined",true);
+        editor.putString("token",data.getToken());
+        editor.putString("nickname",data.getNickname());
+        editor.commit();
     }
 
 }

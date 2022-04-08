@@ -3,11 +3,9 @@ package com.example.frontapp.UserData;
 import com.google.gson.annotations.SerializedName;
 
 public class User {
+    public static boolean isLogined = false;
     @SerializedName("email")
     private String email;
-
-    @SerializedName("password")
-    private String password;
 
     @SerializedName("gender")
     private int gender;
@@ -15,16 +13,8 @@ public class User {
     @SerializedName("nickname")
     private String nickname;
 
-    @SerializedName("Token")
+    @SerializedName("token")
     private String token;
-
-    public String getPassWord() {
-        return password;
-    }
-
-    public void setPassWord(String password) {
-        this.password = password;
-    }
 
     public String getEmail() {
         return email;
@@ -58,12 +48,13 @@ public class User {
         this.token = token;
     }
 
-    public User(String email, String password, int gender, String nickname) {
+    public User(String email, String token, int gender, String nickname) {
         this.email = email;
-        this.password = password;
+        this.token = token;
         this.gender = gender;
         this.nickname = nickname;
     }
+
 
 
 }

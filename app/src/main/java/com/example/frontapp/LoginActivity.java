@@ -1,6 +1,8 @@
 package com.example.frontapp;
 
 import android.content.Intent;
+
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.example.frontapp.UserData.User;
+import com.example.frontapp.UserData.loginRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity {
     private RetrofitClient retrofitClient;
     private EditText emailTextView,passwordTextView;
+    private SharedPreferences loginData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        loginData = getSharedPreferences("UserLoginData", MODE_PRIVATE);
+        boolean isLogined = loginData.getBoolean("isLogined", false);
+        if(isLogined)
+        {
+            String email = loginData.getString("email", null);
+            String password = loginData.getString("password",null);
+            emailTextView.setText(email);
+            passwordTextView.setText(password);
+        }
+
         Button loginBtn  = (Button)findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(new  Button.OnClickListener(){
             @Override
@@ -42,22 +56,20 @@ public class LoginActivity extends AppCompatActivity {
 
                 String email = emailTextView.getText().toString();
                 String password = passwordTextView.getText().toString();
-
-                User data = new User(email, password,1,"aaa");
-
+                loginRequest loginrequest = new loginRequest(email,password);
+                System.out.println(loginrequest.getEmail());
                 //로그인 수행 POST
                 retrofitClient = RetrofitClient.getInstance();
                 ServiceApi serviceApi = RetrofitClient.getRetrofitInterface();
-                serviceApi.loginServer(data).enqueue(new Callback<User>() {
+                serviceApi.loginServer(loginrequest).enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if(response.isSuccessful()) {
                             System.out.println("POST Success");
                             User data = response.body();
-                            //System.out.println(response.body());
+                            putData(data,password);
                             Log.d("TEST", "POST 성공");
                             Log.d("TEST", data.getToken());
-
                             //사진 선택하는 화면으로 넘어감
                             Intent intent = new Intent(getApplicationContext(), SelectActivity.class);
                             startActivity(intent);
@@ -78,4 +90,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void putData(User data, String password)
+    {
+        SharedPreferences.Editor editor = loginData.edit();
+        editor.putString("email",data.getEmail());
+        editor.putString("password",password);
+        editor.putString("token",data.getToken());
+        editor.putString("nickname",data.getNickname());
+        editor.commit();
+    }
 }
