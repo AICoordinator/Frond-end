@@ -4,11 +4,13 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -115,6 +118,17 @@ public class SelectActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == VIDEO_FILE_REQUEST && resultCode == RESULT_OK) {
             Uri videoUri = data.getData();
+
+            //파일크기 불러오기
+            Cursor returnCursor = getContentResolver().query(videoUri, null, null, null, null);
+            int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            returnCursor.moveToFirst();
+            String name = returnCursor.getString(nameIndex);
+            String size = Long.toString(returnCursor.getLong(sizeIndex));
+            Log.d(TAG, "onActivityResult: " + name);
+            Log.d(TAG, "onActivityResult: " + size);
+
             selectedVideo = data.getData();
             imageView.setImageBitmap(createThumbnail(SelectActivity.this, videoUri.toString()));
         }
