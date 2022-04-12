@@ -18,6 +18,6 @@ public interface ServiceApi {
     Call<User> loginServer(@Body User user);
 
     @Multipart
-    @PUT("/result")
+    @POST("/user/result")
     Call<User> sendVideo(@Part("video") RequestBody video);
 }
