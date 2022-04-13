@@ -3,6 +3,7 @@ package com.example.frontapp;
 import com.example.frontapp.UserData.User;
 import com.example.frontapp.UserData.loginRequest;
 import com.example.frontapp.UserData.signUpRequest;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -19,5 +20,7 @@ public interface ServiceApi {
 
     @Multipart
     @POST("/user/result")
-    Call<User> sendVideo(@Part("video") RequestBody video);
+    Call<User> sendVideo(
+            @Part MultipartBody.Part videoFile
+           );
 }

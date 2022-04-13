@@ -4,11 +4,15 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.FileUtils;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.frontapp.UserData.User;
@@ -16,20 +20,25 @@ import okhttp3.*;
 import okio.BufferedSink;
 import okio.Okio;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Multipart;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 public class LoadingActivity extends AppCompatActivity {
 
     RetrofitClient retrofitClient;
     ServiceApi serviceApi;
-
+    Context mContext;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
-
+        mContext = this;
         //다이얼로그 띄워주기
         ProgressDialog progressDialog = new ProgressDialog(this);
         //백그라운드 투명하게
@@ -42,7 +51,7 @@ public class LoadingActivity extends AppCompatActivity {
         //video uri 받아서 backend로 동영상 넘기기
         Intent intent = getIntent();
         String videoStr = intent.getStringExtra("videoUri");
-        Log.d("VIDEO STRING : ", videoStr);
+       Log.d("VIDEO STRING : ", videoStr);
         Uri videoUri = Uri.parse(videoStr);
 
         //서버 접근 api선언
@@ -52,35 +61,21 @@ public class LoadingActivity extends AppCompatActivity {
         //동영상 불러오기
         ContentResolver contentResolver = this.getApplicationContext().getContentResolver();
         String contentType = contentResolver.getType(videoUri);
+
         final AssetFileDescriptor fd;
         try {
             fd = contentResolver.openAssetFileDescriptor(videoUri, "r");
             if (fd == null) { //file open 실피
                 throw new FileNotFoundException("could not open file descriptor");
             }
-
-            RequestBody videoFile = new RequestBody() {
+            String abPath = getPath(videoUri);
+            File file = new File(abPath);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("video/*"), file);
+            MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("video", file.getName(), requestBody);
+            System.out.println("aaaaa");
+            serviceApi.sendVideo(fileToUpload).enqueue(new Callback<User>() {
                 @Override
-                public long contentLength() {
-                    return fd.getDeclaredLength();
-                }
-
-                @Override
-                public MediaType contentType() {
-                    return MediaType.parse(contentType);
-                }
-
-                @Override
-                public void writeTo(BufferedSink sink) throws IOException {
-                    try (InputStream is = fd.createInputStream()) {
-                        sink.writeAll(Okio.buffer(Okio.source(is)));
-                    }
-                }
-            };
-
-            serviceApi.sendVideo(videoFile).enqueue(new retrofit2.Callback<User>() {
-                @Override
-                public void onResponse(retrofit2.Call<User> call, retrofit2.Response<User> response) {
+                public void onResponse(Call<User> call, Response<User> response) {
                     if(response.isSuccessful()) {
                         System.out.println("POST Success");
                         User data = response.body();
@@ -101,97 +96,23 @@ public class LoadingActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-       /* class sendDataToHttp extends AsyncTask<Void, Void, String> {
-            String serverUrl = RetrofitClient.getBaseUrl();
-            OkHttpClient client = new OkHttpClient();
-            Context context;
-
-            public sendDataToHttp(Context context) {
-                this.context = context;
-            }
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-                ContentResolver contentResolver = context.getContentResolver();
-                final String contentType = contentResolver.getType(videoUri);
-                final AssetFileDescriptor fd;
-                try {
-                    fd = contentResolver.openAssetFileDescriptor(videoUri, "r");
-                    if (fd == null) {
-                        throw new FileNotFoundException("could not open file descriptor");
-                    }
-
-                    RequestBody videoFile = new RequestBody() {
-                        @Override
-                        public long contentLength() {
-                            return fd.getDeclaredLength();
-                        }
-
-                        @Override
-                        public MediaType contentType() {
-                            return MediaType.parse(contentType);
-                        }
-
-                        @Override
-                        public void writeTo(BufferedSink sink) throws IOException {
-                            try (InputStream is = fd.createInputStream()) {
-                                sink.writeAll(Okio.buffer(Okio.source(is)));
-                            }
-                        }
-                    };
-
-                    RequestBody requestBody = new MultipartBody.Builder()
-                            .setType(MultipartBody.FORM)
-                            .addFormDataPart("loginUserId", loginUserId)
-                            .addFormDataPart("file", "fname",videoFile)
-                            .build();
-
-                    Request request = new Request.Builder()
-                            .url(serverUrl)
-                            .post(requestBody)
-                            .build();
-
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            try {
-                                fd.close();
-                            } catch (IOException ex) {
-                                e.addSuppressed(ex);
-                            }
-                            Log.d("실패", "failed", e);
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String result = response.body().string();
-                            Log.d("결과",""+result);
-                            fd.close();
-                        }
-                    });
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-            }
-        }
-
-        sendDataToHttp sendData = new sendDataToHttp(this);
-        sendData.execute();*/
-
-
-        //Dialog 종료
-        //progressDialog.dismiss();
     }
+    // 절대 경로 필요함!!
+    private String getPath(Uri uri) {
+        String[] projection = { MediaStore.Video.Media.DATA, MediaStore.Video.Media.SIZE, MediaStore.Video.Media.DURATION};
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        cursor.moveToFirst();
+        String filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+        int fileSize = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
+        long duration = TimeUnit.MILLISECONDS.toSeconds(cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)));
+
+
+        //some extra potentially useful data to help with filtering if necessary
+        System.out.println("size: " + fileSize);
+        System.out.println("path: " + filePath);
+        System.out.println("duration: " + duration);
+
+        return filePath;
+    }
+
 }
