@@ -4,11 +4,8 @@ import com.example.frontapp.UserData.User;
 import com.example.frontapp.UserData.loginRequest;
 import com.example.frontapp.UserData.signUpRequest;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.*;
-
-import java.util.HashMap;
 
 public interface ServiceApi {
     @POST("/user/signup")
@@ -20,7 +17,5 @@ public interface ServiceApi {
 
     @Multipart
     @POST("/user/result")
-    Call<User> sendVideo(
-            @Part MultipartBody.Part videoFile
-           );
+    Call<Result> sendVideo(@Part MultipartBody.Part videoFile);
 }

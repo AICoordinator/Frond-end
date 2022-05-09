@@ -19,15 +19,15 @@ import com.example.frontapp.UserData.User;
 import okhttp3.*;
 import okio.BufferedSink;
 import okio.Okio;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.Multipart;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class LoadingActivity extends AppCompatActivity {
@@ -51,7 +51,7 @@ public class LoadingActivity extends AppCompatActivity {
         //video uri 받아서 backend로 동영상 넘기기
         Intent intent = getIntent();
         String videoStr = intent.getStringExtra("videoUri");
-       Log.d("VIDEO STRING : ", videoStr);
+        Log.d("VIDEO STRING : ", videoStr);
         Uri videoUri = Uri.parse(videoStr);
 
         //서버 접근 api선언
@@ -72,31 +72,134 @@ public class LoadingActivity extends AppCompatActivity {
             File file = new File(abPath);
             RequestBody requestBody = RequestBody.create(MediaType.parse("video/*"), file);
             MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("video", file.getName(), requestBody);
-            System.out.println("aaaaa");
-            serviceApi.sendVideo(fileToUpload).enqueue(new Callback<User>() {
+            serviceApi.sendVideo(fileToUpload).enqueue(new Callback<Result>() {
                 @Override
-                public void onResponse(Call<User> call, Response<User> response) {
+                public void onResponse(Call<Result> call, Response<Result> response) {
                     if(response.isSuccessful()) {
-                        System.out.println("POST Success");
-                        User data = response.body();
-                        Log.d("TEST", "POST 성공");
-                        Log.d("TEST", data.getEmail());
+                        System.out.println("POST Success!!!!!!!!");
+                        Result responseBody = response.body();
+                        Log.d("TEST", responseBody.getImage1());
+                        Log.d("TEST", responseBody.getImage2());
+                        Log.d("TEST", "POST 성공!!!!!!!!!!");
+
+                        //resultActivity로 이동
+                        Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+                        String[] data = {responseBody.getImage1(), responseBody.getImage2(),responseBody.getImage3(),responseBody.getImage4(),
+                                responseBody.getImage5(),responseBody.getImage6(),responseBody.getImage7(),responseBody.getImage8(),
+                                responseBody.getImage9(),responseBody.getImage10()};
+                        intent.putExtra("images", data);
+                        startActivity(intent);
                     }
                     else {
-                        Log.d("TEST", "POST Failed");
+                        Log.d("TEST", "POST Failed!!!!!!!!!!");
                     }
                 }
 
                 @Override
-                public void onFailure(Call<User> call, Throwable t) {
+                public void onFailure(Call<Result> call, Throwable t) {
                     Log.d("FAIL", t.getMessage());
                 }
             });
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
+
+    public static boolean writeResponseBody(ResponseBody body, String path) {
+        try {
+
+            File file = new File(path);
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+                //long fileSize = body.contentLength();
+                //long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(file);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+                    outputStream.write(fileReader, 0, read);
+                    //fileSizeDownloaded += read;
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    private boolean writeResponseBodyToDisk(ResponseBody body) {
+        try {
+            // todo change the file location/name according to your needs
+            File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + "Future Studio Icon.png");
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(futureStudioIconFile);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d("TEST", "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     // 절대 경로 필요함!!
     private String getPath(Uri uri) {
         String[] projection = { MediaStore.Video.Media.DATA, MediaStore.Video.Media.SIZE, MediaStore.Video.Media.DURATION};

@@ -58,7 +58,7 @@ public class SignUpActivity extends AppCompatActivity {
                     gender = 1;
                 else
                     gender = 0;
-                signUpRequest signUpRequest = new signUpRequest(email,password,gender,nickname);
+                signUpRequest signUpRequest = new signUpRequest(email,nickname,gender,password);
                 //POST
                 retrofitClient = RetrofitClient.getInstance();
                 ServiceApi serviceApi = RetrofitClient.getRetrofitInterface();
@@ -66,11 +66,9 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if(response.isSuccessful()) {
-                            System.out.println("POST Success");
                             User data = response.body();
                             if(data != null)
                                 UserDataRepository.setAllUserData(mContext,data,password);
-                            Log.d("TEST", "POST 성공");
                             Log.d("TEST", data.getEmail());
                         }
                         else {

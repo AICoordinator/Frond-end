@@ -20,13 +20,11 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
-        //Video Uri 불러오기
-        Intent getVideo = getIntent();
-        videoUri = Uri.parse(getVideo.getStringExtra("videoUri"));
-
+        Intent intent = getIntent();
+        String[] images = intent.getStringArrayExtra("images");
         //View Pager 적용
         pager = (ViewPager)findViewById(R.id.pager_images);
-        pagerAdapter = new PageAdapter(this);
+        pagerAdapter = new PageAdapter(this, images);
         pager.setAdapter(pagerAdapter);
     }
 
