@@ -27,6 +27,7 @@ public class RetrofitClient {
                 .connectTimeout(300, TimeUnit.SECONDS)
                 .readTimeout(300, TimeUnit.SECONDS)
                 .writeTimeout(300, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
         .addInterceptor(httpLoggingInterceptor()).build();
 
         //retrofit 설정

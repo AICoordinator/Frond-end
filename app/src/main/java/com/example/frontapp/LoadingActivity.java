@@ -77,21 +77,20 @@ public class LoadingActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Result> call, Response<Result> response) {
                     if(response.isSuccessful()) {
-                        Log.d("TEST", "POST 성공!!!!!!!!!!");
-                        Result responseBody = response.body();
-                        Log.d("TEST", "POST 성공!!!!!!!!!!");
-
-                        //resultActivity로 이동
-                        Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
-                        List<Images> images = responseBody.getImages();
-                        Log.d("TEST", responseBody.getEmail());
-                        String[] data = {images.get(0).getOriginImage(), images.get(0).getChangedImage(),
-                                images.get(1).getOriginImage(), images.get(1).getChangedImage(),
-                                images.get(2).getOriginImage(), images.get(2).getChangedImage(),
-                                images.get(3).getOriginImage(), images.get(3).getChangedImage(),
-                                images.get(4).getOriginImage(), images.get(4).getChangedImage()};
-                        intent.putExtra("images", data);
-                        startActivity(intent);
+//                        Log.d("TEST", "POST 성공!!!!!!!!!!");
+//                        Result responseBody = response.body();
+//                        Log.d("TEST", "POST 성공!!!!!!!!!!");
+//                        //resultActivity로 이동
+//                        Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+//                        List<Images> images = responseBody.getImages();
+//                        Log.d("TEST", responseBody.getEmail());
+//                        String[] data = {images.get(0).getOriginImage(), images.get(0).getChangedImage(),
+//                                images.get(1).getOriginImage(), images.get(1).getChangedImage(),
+//                                images.get(2).getOriginImage(), images.get(2).getChangedImage(),
+//                                images.get(3).getOriginImage(), images.get(3).getChangedImage(),
+//                                images.get(4).getOriginImage(), images.get(4).getChangedImage()};
+//                        intent.putExtra("images", data);
+//                        startActivity(intent);
                     }
                     else {
                         Log.d("TEST", "POST Failed!!!!!!!!!!");

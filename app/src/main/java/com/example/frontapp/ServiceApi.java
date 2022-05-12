@@ -16,6 +16,7 @@ public interface ServiceApi {
     Call<User> loginServer(@Body User user);
 
     @Multipart
+    @Streaming
     @POST("/user/result")
     Call<Result> sendVideo(@Part MultipartBody.Part videoFile);
 }
