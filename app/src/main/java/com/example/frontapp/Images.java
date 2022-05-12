@@ -7,7 +7,7 @@ public class Images {
     private String title;
 
     @SerializedName("score")
-    private int score;
+    private String score;
 
     @SerializedName("originImage")
     private String originImage;
@@ -23,11 +23,11 @@ public class Images {
         this.title = title;
     }
 
-    public int getScore() {
+    public String getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(String score) {
         this.score = score;
     }
 

@@ -56,7 +56,7 @@ public class LoadingActivity extends AppCompatActivity {
         Uri videoUri = Uri.parse(videoStr);
 
         //서버 접근 api선언
-        retrofitClient = RetrofitClient.getInstance();
+        //retrofitClient = RetrofitClient.getInstance();
         serviceApi = RetrofitClient.getRetrofitInterface();
 
         //동영상 불러오기
@@ -77,7 +77,7 @@ public class LoadingActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Result> call, Response<Result> response) {
                     if(response.isSuccessful()) {
-                        System.out.println("POST Success!!!!!!!!");
+                        Log.d("TEST", "POST 성공!!!!!!!!!!");
                         Result responseBody = response.body();
                         Log.d("TEST", "POST 성공!!!!!!!!!!");
 
@@ -100,11 +100,12 @@ public class LoadingActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Result> call, Throwable t) {
-                    Log.d("FAIL", t.getMessage());
+                    Log.d("FAIL MESSAGE", t.getMessage());
                 }
             });
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            Log.d("FAIL MESSAGE", "SIBAL");
         }
     }
 
