@@ -24,6 +24,7 @@ public class PageAdapter extends PagerAdapter {
     private static final String TAG = "ShopNewsPagerAdapter";
     private Context context;
     private String[] images;
+    boolean clicked = false;
 
     public PageAdapter(Context context, String[] images) {
         this.context = context;
@@ -52,26 +53,35 @@ public class PageAdapter extends PagerAdapter {
         View view = inflater.inflate(R.layout.activity_page, container , false);
         ImageView imageView = view.findViewById(R.id.resultImage);
 
-
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        byte[] image = outStream.toByteArray();
+        //ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        //byte[] image = outStream.toByteArray();
         // base64String 데이터 -> stream데이터 -> image데이터
-        String data = images[position];
+        String originImage = images[position * 2];
+        String modifiedImage = images[position * 2 + 1];
         //데이터 base64 형식으로 Decode
-        String txtPlainOrg = "";
-        byte[] bytePlainOrg = Base64.decode(data, 0);
+        byte[] bytePlainOrg = Base64.decode(originImage, 0);
+        byte[] bytePlainMod = Base64.decode(modifiedImage, 0);
 
         //byte[] 데이터  stream 데이터로 변환 후 bitmapFactory로 이미지 생성
-        ByteArrayInputStream inStream = new ByteArrayInputStream(bytePlainOrg);
-        Bitmap bm = BitmapFactory.decodeStream(inStream) ;
+        ByteArrayInputStream orgStream = new ByteArrayInputStream(bytePlainOrg);
+        ByteArrayInputStream modStream = new ByteArrayInputStream(bytePlainMod);
+        Bitmap originBm = BitmapFactory.decodeStream(orgStream);
+        Bitmap modifiedBm = BitmapFactory.decodeStream(modStream);
 
-        imageView.setImageBitmap(bm);
+        imageView.setImageBitmap(originBm);
 
+        //사진 클릭시 원래 사진 <-> 수정된 사진 보내기
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(this.getClass().getName(), "On Click Listener Worked!");
-                imageView.setImageResource(R.drawable.aicoordinator_logo);
+                clicked = (clicked) ? false : true;
+                if(clicked) { //수정된 이미지 보여주기
+                    imageView.setImageBitmap(modifiedBm);
+                }
+                else { //원본 이미지 보여주기
+                    imageView.setImageBitmap(originBm);
+                }
             }
         });
 

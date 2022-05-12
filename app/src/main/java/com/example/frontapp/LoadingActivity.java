@@ -28,6 +28,7 @@ import retrofit2.http.Multipart;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class LoadingActivity extends AppCompatActivity {
@@ -78,15 +79,17 @@ public class LoadingActivity extends AppCompatActivity {
                     if(response.isSuccessful()) {
                         System.out.println("POST Success!!!!!!!!");
                         Result responseBody = response.body();
-                        Log.d("TEST", responseBody.getImage1());
-                        Log.d("TEST", responseBody.getImage2());
                         Log.d("TEST", "POST 성공!!!!!!!!!!");
 
                         //resultActivity로 이동
                         Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
-                        String[] data = {responseBody.getImage1(), responseBody.getImage2(),responseBody.getImage3(),responseBody.getImage4(),
-                                responseBody.getImage5(),responseBody.getImage6(),responseBody.getImage7(),responseBody.getImage8(),
-                                responseBody.getImage9(),responseBody.getImage10()};
+                        List<Images> images = responseBody.getImages();
+                        Log.d("TEST", responseBody.getEmail());
+                        String[] data = {images.get(0).getOriginImage(), images.get(0).getChangedImage(),
+                                images.get(1).getOriginImage(), images.get(1).getChangedImage(),
+                                images.get(2).getOriginImage(), images.get(2).getChangedImage(),
+                                images.get(3).getOriginImage(), images.get(3).getChangedImage(),
+                                images.get(4).getOriginImage(), images.get(4).getChangedImage()};
                         intent.putExtra("images", data);
                         startActivity(intent);
                     }

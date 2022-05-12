@@ -6,13 +6,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
 
     private static RetrofitClient instance = null;
     private static ServiceApi serviceApi;
     //사용하고 있는 서버 BASE 주소
-    private static String baseUrl = "http://4ba7-219-255-158-172.ngrok.io/";
+    private static String baseUrl = "http://7a89-58-234-175-160.ngrok.io/";
 
     public static String getBaseUrl() {
         return baseUrl;
@@ -21,7 +22,11 @@ public class RetrofitClient {
 
     private RetrofitClient() {
         //Intercepter 미완성 연결 안됨
-        OkHttpClient client = new OkHttpClient().newBuilder().addInterceptor( new Interceptor() {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(2, TimeUnit.MINUTES)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .addInterceptor( new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
                 return null;
