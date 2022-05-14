@@ -14,12 +14,11 @@ public class RetrofitClient {
     private static RetrofitClient instance = null;
     private static ServiceApi serviceApi;
     //사용하고 있는 서버 BASE 주소
-    private static String baseUrl = "http://d860-58-234-175-160.ngrok.io/";
+    private static String baseUrl = "http://c89f-219-255-158-172.ngrok.io/";
 
     public static String getBaseUrl() {
         return baseUrl;
     }
-
 
     private RetrofitClient() {
         //Intercepter 미완성 연결 안됨
@@ -55,7 +54,7 @@ public class RetrofitClient {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                android.util.Log.e("SEX :", message + "");
+                android.util.Log.e("WOW", message + "");
             }
         });
 

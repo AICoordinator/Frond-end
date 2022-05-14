@@ -10,25 +10,18 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.FileUtils;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.frontapp.UserData.User;
+import com.example.frontapp.UserData.DataManager;
+import com.example.frontapp.UserData.ResultStruct;
 import okhttp3.*;
-import okio.BufferedSink;
-import okio.Okio;
-import org.json.JSONException;
-import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Multipart;
-
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class LoadingActivity extends AppCompatActivity {
@@ -71,29 +64,44 @@ public class LoadingActivity extends AppCompatActivity {
             }
             String abPath = getPath(videoUri);
             File file = new File(abPath);
+            //동영상 첨부
             RequestBody requestBody = RequestBody.create(MediaType.parse("video/*"), file);
             MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("video", file.getName(), requestBody);
             serviceApi.sendVideo(fileToUpload).enqueue(new Callback<Result>() {
                 @Override
                 public void onResponse(Call<Result> call, Response<Result> response) {
                     if(response.isSuccessful()) {
-//                        Log.d("TEST", "POST 성공!!!!!!!!!!");
-//                        Result responseBody = response.body();
-//                        Log.d("TEST", "POST 성공!!!!!!!!!!");
-//                        //resultActivity로 이동
-//                        Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
-//                        List<Images> images = responseBody.getImages();
-//                        Log.d("TEST", responseBody.getEmail());
-//                        String[] data = {images.get(0).getOriginImage(), images.get(0).getChangedImage(),
-//                                images.get(1).getOriginImage(), images.get(1).getChangedImage(),
-//                                images.get(2).getOriginImage(), images.get(2).getChangedImage(),
-//                                images.get(3).getOriginImage(), images.get(3).getChangedImage(),
-//                                images.get(4).getOriginImage(), images.get(4).getChangedImage()};
-//                        intent.putExtra("images", data);
-//                        startActivity(intent);
+                        Log.d("WOW", "POST 성공!!!!!!!!!!");
+                        //응답 객체 json형식으로 받기
+                        Result responseBody = response.body();
+
+                        //result activity로 이동할 intent
+                        Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+
+                        //image에 대핸 정보 객체만 따로 받기
+                        List<Images> images = responseBody.getImages();
+                        //string to byte stream using base64
+                        //view pager로 넘길 정보 파싱
+                        ResultStruct[] resultStructs = new ResultStruct[5];
+                        try {
+                            for (int i = 0; i < 5; i++) {
+                                resultStructs[i] = new ResultStruct(
+                                        Base64.decode(images.get(i).getOriginImage(), 0),
+                                        Base64.decode(images.get(i).getChangedImage(), 0),
+                                        images.get(i).getScore());
+                            }
+                            //singleton 객체 불러와서 이미지 정보 전부 저장
+                            DataManager dataManager = DataManager.getInstance();
+                            dataManager.setResultStructs(resultStructs);
+                            //result activity로 이동
+                            startActivity(intent);
+                        }
+                        catch(NullPointerException e) {
+                            e.printStackTrace();
+                        }
                     }
                     else {
-                        Log.d("TEST", "POST Failed!!!!!!!!!!");
+                        Log.d("WOW", "POST Failed!!!!!!!!!!");
                     }
                 }
 
@@ -105,101 +113,6 @@ public class LoadingActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Log.d("FAIL MESSAGE", "SIBAL");
-        }
-    }
-
-    public static boolean writeResponseBody(ResponseBody body, String path) {
-        try {
-
-            File file = new File(path);
-
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-
-            try {
-                byte[] fileReader = new byte[4096];
-                //long fileSize = body.contentLength();
-                //long fileSizeDownloaded = 0;
-
-                inputStream = body.byteStream();
-                outputStream = new FileOutputStream(file);
-
-                while (true) {
-                    int read = inputStream.read(fileReader);
-
-                    if (read == -1) {
-                        break;
-                    }
-                    outputStream.write(fileReader, 0, read);
-                    //fileSizeDownloaded += read;
-                }
-
-                outputStream.flush();
-
-                return true;
-            } catch (IOException e) {
-                return false;
-            } finally {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            }
-        } catch (IOException e) {
-            return false;
-        }
-    }
-
-    private boolean writeResponseBodyToDisk(ResponseBody body) {
-        try {
-            // todo change the file location/name according to your needs
-            File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + "Future Studio Icon.png");
-
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-
-            try {
-                byte[] fileReader = new byte[4096];
-
-                long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;
-
-                inputStream = body.byteStream();
-                outputStream = new FileOutputStream(futureStudioIconFile);
-
-                while (true) {
-                    int read = inputStream.read(fileReader);
-
-                    if (read == -1) {
-                        break;
-                    }
-
-                    outputStream.write(fileReader, 0, read);
-
-                    fileSizeDownloaded += read;
-
-                    Log.d("TEST", "file download: " + fileSizeDownloaded + " of " + fileSize);
-                }
-
-                outputStream.flush();
-
-                return true;
-            } catch (IOException e) {
-                return false;
-            } finally {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            }
-        } catch (IOException e) {
-            return false;
         }
     }
 

@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.viewpager.widget.ViewPager;
 
+import java.util.ArrayList;
+
 public class ResultActivity extends AppCompatActivity {
 
     private ViewPager pager;
@@ -19,12 +21,17 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        Log.d("WOW", "RESULT ACTIVITY START!");
 
-        Intent intent = getIntent();
-        String[] images = intent.getStringArrayExtra("images");
         //View Pager 적용
         pager = (ViewPager)findViewById(R.id.pager_images);
-        pagerAdapter = new PageAdapter(this, images);
+        pagerAdapter = new PageAdapter(this);
+
+        //주위 패딩 적용
+        pager.setClipToPadding(false);
+        pager.setPadding(100, 0, 100, 0);
+        pager.setPageMargin(50);
+
         pager.setAdapter(pagerAdapter);
     }
 

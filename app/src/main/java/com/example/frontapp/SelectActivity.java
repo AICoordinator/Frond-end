@@ -126,8 +126,6 @@ public class SelectActivity extends AppCompatActivity {
             returnCursor.moveToFirst();
             String name = returnCursor.getString(nameIndex);
             String size = Long.toString(returnCursor.getLong(sizeIndex));
-            Log.d(TAG, "onActivityResult: " + name);
-            Log.d(TAG, "onActivityResult: " + size);
 
             selectedVideo = data.getData();
             imageView.setImageBitmap(createThumbnail(SelectActivity.this, videoUri.toString()));

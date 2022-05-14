@@ -12,7 +12,6 @@ public class Result {
     @SerializedName("images")
     private List<Images> images;
 
-
     public String getEmail() {
         return email;
     }
