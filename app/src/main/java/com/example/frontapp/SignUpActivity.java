@@ -1,6 +1,7 @@
 package com.example.frontapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
@@ -69,7 +70,8 @@ public class SignUpActivity extends AppCompatActivity {
                             User data = response.body();
                             if(data != null)
                                 UserDataRepository.setAllUserData(mContext,data,password);
-                            Log.d("TEST", data.getEmail());
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
                         }
                         else {
                             Log.d("TEST", "POST Failed");

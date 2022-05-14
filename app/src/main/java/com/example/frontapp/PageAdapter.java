@@ -58,7 +58,6 @@ public class PageAdapter extends PagerAdapter {
         //점수 나타낼 textview
         TextView scoreView = view.findViewById(R.id.resultScore);
 
-
         //singleton으로부터 데이터 가져오기
         DataManager dataManager = DataManager.getInstance();
         resultStructs = dataManager.getResultStructs();

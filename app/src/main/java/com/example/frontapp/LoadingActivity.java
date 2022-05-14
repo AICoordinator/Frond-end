@@ -89,6 +89,7 @@ public class LoadingActivity extends AppCompatActivity {
                                         Base64.decode(images.get(i).getOriginImage(), 0),
                                         Base64.decode(images.get(i).getChangedImage(), 0),
                                         images.get(i).getScore());
+                                Log.d("WOW", images.get(i).getScore());
                             }
                             //singleton 객체 불러와서 이미지 정보 전부 저장
                             DataManager dataManager = DataManager.getInstance();
