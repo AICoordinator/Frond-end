@@ -1,53 +1,46 @@
-package com.example.frontapp;
+package com.example.frontapp.Activity;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
+import com.example.frontapp.R;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class SelectActivity extends AppCompatActivity {
     private static final String TAG = "SelectActivity";
     private static final int VIDEO_FILE_REQUEST = 101;
-    Button uploadBtn, sendBtn;
-    ImageView imageView;
+    ImageView selectBtn, uploadBtn, profileBtn;
     Uri selectedVideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
 
-        uploadBtn = (Button)findViewById(R.id.uploadBtn);
-        imageView = (ImageView)findViewById(R.id.imageView);
-        sendBtn = (Button)findViewById(R.id.sendBtn);
+        uploadBtn = (ImageView)findViewById(R.id.uploadBtn);
+        selectBtn = (ImageView)findViewById(R.id.selectBtn);
+        profileBtn = (ImageView)findViewById(R.id.profileBtn);
 
         //업로드 버튼
-        uploadBtn.setOnClickListener(new View.OnClickListener() {
+        selectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getVideo();
@@ -55,7 +48,7 @@ public class SelectActivity extends AppCompatActivity {
         });
 
         //전송 버튼
-        sendBtn.setOnClickListener(new View.OnClickListener() {
+        uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), LoadingActivity.class);
@@ -128,7 +121,7 @@ public class SelectActivity extends AppCompatActivity {
             String size = Long.toString(returnCursor.getLong(sizeIndex));
 
             selectedVideo = data.getData();
-            imageView.setImageBitmap(createThumbnail(SelectActivity.this, videoUri.toString()));
+            selectBtn.setImageBitmap(createThumbnail(SelectActivity.this, videoUri.toString()));
         }
     }
 

@@ -6,20 +6,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_margin="10dp"
-        tools:context=".PageActivity">
+        android:layout_margin="10dp" app:circularflow_radiusInDP="10dp">
 
     <ImageView
             android:id="@+id/resultImage"
-            android:src="@drawable/aistylist_logo"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="5"/>
-    <TextView
-            android:id="@+id/resultScore" android:layout_marginTop="10dp"
-            android:layout_width="match_parent" android:layout_height="0dp"
-            android:layout_weight="1" android:textSize="25dp"
-            android:gravity="center"/>
+            android:layout_weight="5"
+            android:background="@drawable/imageborder"/>
 
 
 </LinearLayout>

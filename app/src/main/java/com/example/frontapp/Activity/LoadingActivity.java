@@ -1,4 +1,4 @@
-package com.example.frontapp;
+package com.example.frontapp.Activity;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,13 +8,19 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Window;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.frontapp.UserData.DataManager;
+import com.example.frontapp.Communication.RetrofitClient;
+import com.example.frontapp.Communication.ServiceApi;
+import com.example.frontapp.Data.Images;
+import com.example.frontapp.Data.Result;
+import com.example.frontapp.ProgressDialog;
+import com.example.frontapp.R;
+import com.example.frontapp.Data.DataManager;
 import com.example.frontapp.UserData.ResultStruct;
 import okhttp3.*;
 import retrofit2.Call;
@@ -30,6 +36,7 @@ public class LoadingActivity extends AppCompatActivity {
     ServiceApi serviceApi;
     Context mContext;
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         mContext = this;
@@ -67,19 +74,19 @@ public class LoadingActivity extends AppCompatActivity {
             //동영상 첨부
             RequestBody requestBody = RequestBody.create(MediaType.parse("video/*"), file);
             MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("video", file.getName(), requestBody);
-            serviceApi.sendVideo(fileToUpload).enqueue(new Callback<Result>() {
+            serviceApi.sendVideo(fileToUpload).enqueue(new Callback<List<Images>>() {
                 @Override
-                public void onResponse(Call<Result> call, Response<Result> response) {
+                public void onResponse(Call<List<Images>> call, Response<List<Images>> response) {
                     if(response.isSuccessful()) {
                         Log.d("WOW", "POST 성공!!!!!!!!!!");
                         //응답 객체 json형식으로 받기
-                        Result responseBody = response.body();
+                        List<Images> responseBody = response.body();
 
                         //result activity로 이동할 intent
                         Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
 
                         //image에 대핸 정보 객체만 따로 받기
-                        List<Images> images = responseBody.getImages();
+                        List<Images> images = responseBody;
                         //string to byte stream using base64
                         //view pager로 넘길 정보 파싱
                         ResultStruct[] resultStructs = new ResultStruct[5];
@@ -107,7 +114,7 @@ public class LoadingActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<Result> call, Throwable t) {
+                public void onFailure(Call<List<Images>> call, Throwable t) {
                     Log.d("FAIL MESSAGE", t.getMessage());
                 }
             });

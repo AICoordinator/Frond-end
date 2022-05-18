@@ -1,29 +1,25 @@
-package com.example.frontapp;
+package com.example.frontapp.Activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.example.frontapp.Communication.ServiceApi;
+import com.example.frontapp.R;
 import com.example.frontapp.UserData.User;
-import com.example.frontapp.RetrofitClient;
+import com.example.frontapp.Communication.RetrofitClient;
 import com.example.frontapp.UserData.UserDataRepository;
 import com.example.frontapp.UserData.signUpRequest;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
     Button signUp;
@@ -35,6 +31,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         mContext = this;

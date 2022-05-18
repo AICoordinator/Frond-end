@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        tools:context=".IntroActivity" android:background="#595959">
+        tools:context=".Activity.IntroActivity" android:background="#E4DFFF">
     <ImageView
             android:id="@+id/logoImg"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:src="@drawable/aistylist_logo"
-    />
+            android:layout_width="268dp" android:layout_height="51dp"
+            android:src="@drawable/logo"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="72.75dp" android:layout_marginTop="289dp"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

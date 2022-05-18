@@ -1,9 +1,11 @@
-package com.example.frontapp.UserData;
+package com.example.frontapp.Data;
+
+import com.example.frontapp.UserData.ResultStruct;
 
 public class DataManager {
     private static final DataManager instance = new DataManager();
     private static ResultStruct[] resultStructs;
-
+    private static boolean[] selectedImages = new boolean[5];
     private DataManager() {}
 
     public static DataManager getInstance() {
@@ -16,5 +18,10 @@ public class DataManager {
 
     public static void setResultStructs(ResultStruct[] resultStructs) {
         DataManager.resultStructs = resultStructs;
+    }
+
+    public static boolean select(int n) {
+        selectedImages[n] = (selectedImages[n]) ? false : true;
+        return selectedImages[n];
     }
 }

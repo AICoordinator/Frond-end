@@ -1,9 +1,11 @@
-package com.example.frontapp;
+package com.example.frontapp.Activity;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.view.Window;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.example.frontapp.R;
 
 public class IntroActivity extends AppCompatActivity {
 
@@ -19,6 +21,7 @@ public class IntroActivity extends AppCompatActivity {
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro); // xml과 java소스를 연결
     } // end of onCreate

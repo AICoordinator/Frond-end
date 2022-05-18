@@ -1,4 +1,4 @@
-package com.example.frontapp;
+package com.example.frontapp.Activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,19 +6,22 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.example.frontapp.Communication.RetrofitClient;
+import com.example.frontapp.Communication.ServiceApi;
+import com.example.frontapp.R;
 import com.example.frontapp.UserData.User;
 import com.example.frontapp.UserData.UserDataRepository;
 import com.example.frontapp.UserData.loginRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
     private RetrofitClient retrofitClient;
@@ -28,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         emailTextView = findViewById(R.id.emailTextView);
@@ -35,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mContext = this;
 
-        Button signUpBtn = (Button)findViewById(R.id.signUpBtn);
+        TextView signUpBtn = (TextView)findViewById(R.id.signUpBtn);
         signUpBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -12,29 +12,28 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/Theme.FrontApp"
-            android:usesCleartextTraffic="true">
+            android:usesCleartextTraffic="true"
+            android:theme="@style/AppTheme">
+    <!--            android:theme="@style/Theme.FrontApp"-->>
         <activity
-                android:name=".PageActivity"
+                android:name=".Activity.SelectActivity"
                 android:exported="true"/>
         <activity
-                android:name=".SelectActivity"
+                android:name=".Activity.ResultActivity"
                 android:exported="true"/>
         <activity
-                android:name=".ResultActivity"
+                android:name=".Activity.SignUpActivity"
                 android:exported="true"/>
         <activity
-                android:name=".SignUpActivity"
+                android:name=".Activity.LoginActivity"
                 android:exported="true"/>
         <activity
-                android:name=".LoginActivity"
+                android:name=".Activity.LoadingActivity"
                 android:exported="true"/>
         <activity
-                android:name=".LoadingActivity"
-                android:exported="true"/>
-        <activity
-                android:name=".IntroActivity"
-                android:exported="true">
+                android:name=".Activity.IntroActivity"
+                android:exported="true"
+                android:theme="@style/NoTitle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

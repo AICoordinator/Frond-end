@@ -1,11 +1,15 @@
-package com.example.frontapp;
+package com.example.frontapp.Communication;
 
+import com.example.frontapp.Data.Images;
+import com.example.frontapp.Data.Result;
 import com.example.frontapp.UserData.User;
 import com.example.frontapp.UserData.loginRequest;
 import com.example.frontapp.UserData.signUpRequest;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.*;
+
+import java.util.List;
 
 public interface ServiceApi {
     @POST("/user/signup")
@@ -18,5 +22,5 @@ public interface ServiceApi {
     @Multipart
     @Streaming
     @POST("/user/result")
-    Call<Result> sendVideo(@Part MultipartBody.Part videoFile);
+    Call<List<Images>> sendVideo(@Part MultipartBody.Part videoFile);
 }

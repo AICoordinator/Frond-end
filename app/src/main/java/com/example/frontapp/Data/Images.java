@@ -1,4 +1,4 @@
-package com.example.frontapp;
+package com.example.frontapp.Data;
 
 import com.google.gson.annotations.SerializedName;
 
