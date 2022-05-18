@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Window;
+import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.frontapp.Communication.RetrofitClient;
 import com.example.frontapp.Communication.ServiceApi;
@@ -30,15 +31,26 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static com.example.frontapp.Activity.SelectActivity.createThumbnail;
+
 public class LoadingActivity extends AppCompatActivity {
 
-    RetrofitClient retrofitClient;
     ServiceApi serviceApi;
+    ImageView imageView;
     Context mContext;
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
+        //video uri 받아서 backend로 동영상 넘기기
+        Intent intent = getIntent();
+        String videoStr = intent.getStringExtra("videoUri");
+        Log.d("VIDEO STRING : ", videoStr);
+        Uri videoUri = Uri.parse(videoStr);
+
+        imageView = findViewById(R.id.selectBtn);
+        imageView.setImageBitmap(createThumbnail(LoadingActivity.this, videoStr));
         mContext = this;
         //다이얼로그 띄워주기
         ProgressDialog progressDialog = new ProgressDialog(this);
@@ -49,11 +61,6 @@ public class LoadingActivity extends AppCompatActivity {
         //로딩화면 보여주기
         progressDialog.show();
 
-        //video uri 받아서 backend로 동영상 넘기기
-        Intent intent = getIntent();
-        String videoStr = intent.getStringExtra("videoUri");
-        Log.d("VIDEO STRING : ", videoStr);
-        Uri videoUri = Uri.parse(videoStr);
 
         //서버 접근 api선언
         //retrofitClient = RetrofitClient.getInstance();

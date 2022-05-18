@@ -39,7 +39,7 @@ public class SelectActivity extends AppCompatActivity {
         selectBtn = (ImageView)findViewById(R.id.selectBtn);
         profileBtn = (ImageView)findViewById(R.id.profileBtn);
 
-        //업로드 버튼
+        //사진 선택 버튼
         selectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,6 +122,7 @@ public class SelectActivity extends AppCompatActivity {
 
             selectedVideo = data.getData();
             selectBtn.setImageBitmap(createThumbnail(SelectActivity.this, videoUri.toString()));
+            selectBtn.setBackgroundResource(R.drawable.imageborder);
         }
     }
 
