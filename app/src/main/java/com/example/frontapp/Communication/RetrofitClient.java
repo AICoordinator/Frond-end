@@ -1,10 +1,14 @@
 package com.example.frontapp.Communication;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
@@ -25,7 +29,10 @@ public class RetrofitClient {
                 .readTimeout(300, TimeUnit.SECONDS)
                 .writeTimeout(300, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
-        .addInterceptor(httpLoggingInterceptor()).build();
+                .addInterceptor(chain -> {
+                    Request request = chain.request().newBuilder().addHeader("Authorization",TokenRepository.getAuthToken()).build();
+                    return chain.proceed(request);
+                }).addInterceptor(httpLoggingInterceptor()).build();
 
         //retrofit 설정
         Retrofit retrofit = new Retrofit.Builder()
@@ -47,6 +54,7 @@ public class RetrofitClient {
     public static ServiceApi getRetrofitInterface() {
         return serviceApi;
     }
+
     private HttpLoggingInterceptor httpLoggingInterceptor(){
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {

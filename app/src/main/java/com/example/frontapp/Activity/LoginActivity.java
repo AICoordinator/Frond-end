@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.example.frontapp.Communication.RetrofitClient;
 import com.example.frontapp.Communication.ServiceApi;
+import com.example.frontapp.Communication.TokenRepository;
 import com.example.frontapp.R;
 import com.example.frontapp.UserData.User;
 import com.example.frontapp.UserData.UserDataRepository;
@@ -33,6 +34,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+
+        TokenRepository tokenRepository = TokenRepository.getInstance();
+
         setContentView(R.layout.activity_login);
         emailTextView = findViewById(R.id.emailTextView);
         passwordTextView = findViewById(R.id.passwordTextView);
@@ -72,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(response.isSuccessful()) {
                             System.out.println("POST Success");
                             User data = response.body();
+                            tokenRepository.setAuthToken(data.getToken());
                             if(data != null)
                                 UserDataRepository.setAllUserData(mContext,data,password);
                             Log.d("TEST", "POST 성공");

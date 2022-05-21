@@ -12,6 +12,7 @@ import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
@@ -26,7 +27,8 @@ import java.util.ArrayList;
 public class SelectActivity extends AppCompatActivity {
     private static final String TAG = "SelectActivity";
     private static final int VIDEO_FILE_REQUEST = 101;
-    ImageView selectBtn, uploadBtn, profileBtn;
+    ImageView selectBtn, profileBtn;
+    Button uploadBtn;
     Uri selectedVideo;
 
     @Override
@@ -35,7 +37,7 @@ public class SelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
 
-        uploadBtn = (ImageView)findViewById(R.id.uploadBtn);
+        uploadBtn = (Button)findViewById(R.id.uploadBtn);
         selectBtn = (ImageView)findViewById(R.id.selectBtn);
         profileBtn = (ImageView)findViewById(R.id.profileBtn);
 
