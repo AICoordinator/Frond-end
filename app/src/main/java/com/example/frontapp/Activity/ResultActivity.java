@@ -81,6 +81,12 @@ public class ResultActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 //점수 나타낼 textview
                 scoreView.setText(resultStructs[pager.getCurrentItem()].getResultScore());
+                if(dataManager.isSelected(pager.getCurrentItem())) {
+                    selectedBtn.setImageResource(R.drawable.selected);
+                }
+                else {
+                    selectedBtn.setImageResource(R.drawable.unselected);
+                }
             }
 
             @Override

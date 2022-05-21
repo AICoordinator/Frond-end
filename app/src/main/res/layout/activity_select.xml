@@ -24,8 +24,11 @@
     <ImageView android:id="@+id/selectBtn" android:layout_width="356dp" android:layout_height="416dp" android:src="@drawable/selectvideo"
                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
                android:layout_marginStart="29dp" android:layout_marginTop="160dp"/>
-    <ImageView android:id="@+id/uploadBtn" android:layout_width="356dp" android:layout_height="42dp" app:layout_constraintTop_toTopOf="parent"
-               app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="29dp"
-               android:layout_marginTop="604dp" android:src="@drawable/analysis"/>
+    <Button android:layout_width="match_parent" android:layout_height="42dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="604dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="29dp" android:layout_marginEnd="29dp"
+            app:layout_constraintEnd_toEndOf="parent" android:text="분석하기"
+            android:textColor="#ffffff" android:id="@+id/uploadBtn"
+            android:background="@drawable/buttonborder"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

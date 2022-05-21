@@ -73,7 +73,7 @@ public class SelectActivity extends AppCompatActivity {
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
                 Log.d(TAG, "onPermissionDenied:");
-                Toast.makeText(SelectActivity.this, "권한요청실패", Toast.LENGTH_SHORT);
+                Toast.makeText(SelectActivity.this, "권한요청실패", Toast.LENGTH_SHORT).show();
             }
 
         };

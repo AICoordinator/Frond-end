@@ -24,4 +24,8 @@ public class DataManager {
         selectedImages[n] = (selectedImages[n]) ? false : true;
         return selectedImages[n];
     }
+
+    public static boolean isSelected(int n) {
+        return selectedImages[n];
+    }
 }

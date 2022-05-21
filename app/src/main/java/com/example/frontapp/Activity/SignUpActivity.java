@@ -9,6 +9,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.example.frontapp.Communication.ServiceApi;
@@ -23,7 +24,7 @@ import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
     Button signUp;
-    EditText emailTextView, passwordTextView, nickNameTextView;
+    EditText emailTextView, passwordTextView1, passwordTextView2, nickNameTextView;
     RadioGroup genderGroup;
     RetrofitClient retrofitClient;
     private SharedPreferences loginData;
@@ -37,9 +38,10 @@ public class SignUpActivity extends AppCompatActivity {
         mContext = this;
 
         //view 아이디 연결
-        signUp = findViewById(R.id.doSignUpBtn);
+        signUp = findViewById(R.id.signUpBtn);
         emailTextView = findViewById(R.id.emailTextView);
-        passwordTextView = findViewById(R.id.passwordTextView);
+        passwordTextView1 = findViewById(R.id.passwordTextView1);
+        passwordTextView2 = findViewById(R.id.passwordTextView2);
         nickNameTextView = findViewById(R.id.nickNameTextView);
         genderGroup = findViewById(R.id.genderGroup);
 
@@ -48,15 +50,21 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String email = emailTextView.getText().toString();
-                String password = passwordTextView.getText().toString();
+                String password1 = passwordTextView1.getText().toString();
+                String password2 = passwordTextView2.getText().toString();
                 String nickname = nickNameTextView.getText().toString();
+                if(!password1.equals(password2)) {
+                    Log.d("WOW", "비밀번호 틀림");
+                    Toast.makeText(SignUpActivity.this, "두 비밀번호가 같지 않습니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 int gender;
                 int id = genderGroup.getCheckedRadioButtonId();
                 if(id == R.id.manBtn)
                     gender = 1;
                 else
                     gender = 0;
-                signUpRequest signUpRequest = new signUpRequest(email,nickname,gender,password);
+                signUpRequest signUpRequest = new signUpRequest(email,nickname,gender,password1);
                 //POST
                 retrofitClient = RetrofitClient.getInstance();
                 ServiceApi serviceApi = RetrofitClient.getRetrofitInterface();
@@ -66,7 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
                         if(response.isSuccessful()) {
                             User data = response.body();
                             if(data != null)
-                                UserDataRepository.setAllUserData(mContext,data,password);
+                                UserDataRepository.setAllUserData(mContext,data,password1);
                             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(intent);
                         }
