@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.viewpager.widget.ViewPager;
-import com.example.frontapp.PageAdapter;
+import com.example.frontapp.Adapter.PageAdapter;
 import com.example.frontapp.R;
 import com.example.frontapp.Data.DataManager;
 import com.example.frontapp.UserData.ResultStruct;

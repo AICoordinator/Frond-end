@@ -1,4 +1,4 @@
-package com.example.frontapp;
+package com.example.frontapp.Adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import com.example.frontapp.Data.DataManager;
+import com.example.frontapp.R;
 import com.example.frontapp.UserData.ResultStruct;
 
 import java.io.ByteArrayInputStream;
