@@ -16,7 +16,7 @@ public class RetrofitClient {
     private static RetrofitClient instance = null;
     private static ServiceApi serviceApi;
     //사용하고 있는 서버 BASE 주소
-    private static String baseUrl = "http://a57a-219-255-158-172.ngrok.io/";
+    private static String baseUrl = "10.21.1.49/";
 
     public static String getBaseUrl() {
         return baseUrl;
