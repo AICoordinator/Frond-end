@@ -127,7 +127,7 @@ public class LoadingActivity extends AppCompatActivity {
             });
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            Log.d("FAIL MESSAGE", "SIBAL");
+            Log.d("WOW", "Load video failed");
         }
     }
 

@@ -4,14 +4,17 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.frontapp.Data.DataManager;
 import com.example.frontapp.Data.Images;
 import com.example.frontapp.R;
+import com.example.frontapp.SignUpResponse;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -21,13 +24,14 @@ public class GridAdapter extends BaseAdapter {
     private Context mContext;
     private List<Images> imagesList;
 
-    public GridAdapter() {
-        imagesList = DataManager.getTotalResultStructs();
+    public GridAdapter(List<Images> imagesList) {
+        this.imagesList = imagesList;
     }
 
     @Override
     public int getCount() {
-        return imagesList.size();
+        Log.d("WOW", "count : " + DataManager.getTotalResultStructsSize());
+        return DataManager.getTotalResultStructsSize();
     }
 
     @Override
@@ -42,7 +46,9 @@ public class GridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        Log.d("WOW", "start getView");
         Context context = viewGroup.getContext();
+
         if(view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.item, viewGroup, false);

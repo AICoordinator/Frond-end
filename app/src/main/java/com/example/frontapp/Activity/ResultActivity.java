@@ -1,5 +1,6 @@
 package com.example.frontapp.Activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -52,6 +53,8 @@ public class ResultActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("WOW", "profile button touched~");
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(intent);
             }
         });
 

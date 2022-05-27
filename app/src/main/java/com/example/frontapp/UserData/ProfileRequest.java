@@ -2,17 +2,12 @@ package com.example.frontapp.UserData;
 
 import com.google.gson.annotations.SerializedName;
 
-public class loginRequest {
+public class ProfileRequest {
     @SerializedName("email")
     private String email;
 
-    @SerializedName("password")
-    private String password;
-
-    public loginRequest(String email, String password)
-    {
+    public ProfileRequest(String email) {
         this.email = email;
-        this.password = password;
     }
 
     public String getEmail() {

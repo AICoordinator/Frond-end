@@ -2,6 +2,7 @@ package com.example.frontapp.Communication;
 
 import com.example.frontapp.Data.Images;
 import com.example.frontapp.Data.Result;
+import com.example.frontapp.UserData.ProfileRequest;
 import com.example.frontapp.UserData.User;
 import com.example.frontapp.UserData.loginRequest;
 import com.example.frontapp.UserData.signUpRequest;
@@ -17,10 +18,13 @@ public interface ServiceApi {
 
     @POST("/user/login")
     Call<User> loginServer(@Body loginRequest loginRequest);
-    Call<User> loginServer(@Body User user);
 
     @Multipart
     @Streaming
     @POST("/user/result")
     Call<List<Images>> sendVideo(@Part MultipartBody.Part videoFile);
+
+    @Streaming
+    @POST("/user/profile")
+    Call<List<Images>> getProfile(@Body ProfileRequest profileRequest);
 }

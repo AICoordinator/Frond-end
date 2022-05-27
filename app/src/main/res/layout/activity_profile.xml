@@ -20,7 +20,7 @@
                    app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="77dp"
                    android:layout_marginStart="334dp" android:src="@drawable/profile"/>
         <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:layout_width="match_parent" android:layout_height="44dp"
+                android:layout_width="match_parent" android:layout_height="44dp" android:id="@+id/navgation_bar"
                 app:layout_constraintBottom_toBottomOf="parent" app:menu="@menu/bottom_menu"
                 app:labelVisibilityMode="unlabeled" app:itemBackground="@color/theme"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

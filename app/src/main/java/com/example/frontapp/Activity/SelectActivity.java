@@ -41,6 +41,17 @@ public class SelectActivity extends AppCompatActivity {
         selectBtn = (ImageView)findViewById(R.id.selectBtn);
         profileBtn = (ImageView)findViewById(R.id.profileBtn);
 
+
+        //프로필 버튼 누를 시
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("WOW", "profile button touched~");
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //사진 선택 버튼
         selectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
