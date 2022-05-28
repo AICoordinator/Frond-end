@@ -1,6 +1,8 @@
 package com.example.frontapp.Activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.session.MediaSession;
 import android.util.Base64;
 import android.util.Log;
@@ -20,6 +22,7 @@ import com.example.frontapp.Data.Images;
 import com.example.frontapp.Fragments.DownFragment;
 import com.example.frontapp.Fragments.NewFragment;
 import com.example.frontapp.Fragments.UpFragment;
+import com.example.frontapp.ProgressDialog;
 import com.example.frontapp.R;
 import com.example.frontapp.UserData.ProfileRequest;
 import com.example.frontapp.UserData.ResultStruct;
@@ -34,9 +37,22 @@ public class ProfileActivity extends AppCompatActivity {
 
     ServiceApi serviceApi;
     DataManager dataManager;
+    NewFragment newFragment;
+    UpFragment upFragment;
+    DownFragment downFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile);
+
+        //다이얼로그 띄워주기
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        //백그라운드 투명하게
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //클릭해도 종료되지 않도록
+        progressDialog.setCancelable(false);
+        //로딩화면 보여주기
+        progressDialog.show();
 
         //여기에 통신 코드
         serviceApi = RetrofitClient.getRetrofitInterface();
@@ -49,6 +65,11 @@ public class ProfileActivity extends AppCompatActivity {
                     Log.d("WOW", "profile response successful");
                     dataManager = DataManager.getInstance();
                     dataManager.setTotalResultStructs(response.body());
+                    newFragment = new NewFragment();
+                    upFragment = new UpFragment();
+                    downFragment = new DownFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, newFragment).commit();
+                    progressDialog.dismiss();
                 }
             }
 
@@ -58,13 +79,10 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        setContentView(R.layout.activity_profile);
 
-        NewFragment newFragment = new NewFragment();
-        UpFragment upFragment = new UpFragment();
-        DownFragment downFragment = new DownFragment();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, newFragment).commit();
+
+        Log.d("WOW", "retrofit communication completed");
 
         BottomNavigationView btn = findViewById(R.id.navgation_bar);
         btn.setItemIconTintList(null);
