@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,11 +34,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     ServiceApi serviceApi;
     DataManager dataManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         //여기에 통신 코드
         serviceApi = RetrofitClient.getRetrofitInterface();
@@ -68,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, newFragment).commit();
 
         BottomNavigationView btn = findViewById(R.id.navgation_bar);
+        btn.setItemIconTintList(null);
         btn.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

@@ -11,6 +11,8 @@
         <entry key="app/src/main/res/drawable/ic_baseline_camera_alt_24.xml" value="0.33541666666666664" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.33541666666666664" />
         <entry key="app/src/main/res/drawable/imageborder.xml" value="0.2869791666666667" />
+        <entry key="app/src/main/res/drawable/menu_down_selector.xml" value="0.4296875" />
+        <entry key="app/src/main/res/drawable/menu_up_selector.xml" value="0.4296875" />
         <entry key="app/src/main/res/drawable/radius.xml" value="0.2890625" />
         <entry key="app/src/main/res/layout/activity_capture.xml" value="0.21195652173913043" />
         <entry key="app/src/main/res/layout/activity_down.xml" value="0.36096014492753625" />
