@@ -57,8 +57,8 @@ public class ProfileActivity extends AppCompatActivity {
         //여기에 통신 코드
         serviceApi = RetrofitClient.getRetrofitInterface();
         Log.d("WOW", "Token : " + TokenRepository.getAuthToken());
-        ProfileRequest profileRequest = new ProfileRequest("royseo98@gmail.com");
-        serviceApi.getProfile(profileRequest).enqueue(new Callback<List<Images>>() {
+        //ProfileRequest profileRequest = new ProfileRequest("royseo98@gmail.com");
+        serviceApi.getProfile().enqueue(new Callback<List<Images>>() {
             @Override
             public void onResponse(Call<List<Images>> call, Response<List<Images>> response) {
                 if(response.isSuccessful()) {

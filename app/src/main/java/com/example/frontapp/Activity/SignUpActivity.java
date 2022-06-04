@@ -71,7 +71,10 @@ public class SignUpActivity extends AppCompatActivity {
                 serviceApi.postData(signUpRequest).enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-                        if(response.isSuccessful()) {
+                        if(response.code() == 400) {
+                            Toast.makeText(SignUpActivity.this, "이미 존재하는 이메일입니다.", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(response.isSuccessful()) {
                             User data = response.body();
                             if(data != null)
                                 UserDataRepository.setAllUserData(mContext,data,password1);

@@ -17,7 +17,9 @@ public class DataManager {
 
     //프로필 사진들 불러오기
     private static List<Images> totalResultStructs;
+    //오름차순
     private static List<Images> upTotalResultStructs;
+    //내림차순
     private static List<Images> downTotalResultStructs;
 
 
@@ -25,6 +27,14 @@ public class DataManager {
 
     public static DataManager getInstance() {
         return instance;
+    }
+
+    public static void initiateResultStruct() {
+        resultStructs = null;
+    }
+
+    public static void initiateSelectedImages() {
+        selectedImages = new boolean[5];
     }
 
     public static ResultStruct[] getResultStructs() {
@@ -83,4 +93,7 @@ public class DataManager {
             return totalResultStructs.size();
     }
 
+    public static boolean[] getSelectedImages() {
+        return selectedImages;
+    }
 }

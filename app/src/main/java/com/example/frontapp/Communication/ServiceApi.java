@@ -1,5 +1,6 @@
 package com.example.frontapp.Communication;
 
+import com.example.frontapp.Data.EraseImages;
 import com.example.frontapp.Data.Images;
 import com.example.frontapp.Data.Result;
 import com.example.frontapp.UserData.ProfileRequest;
@@ -25,6 +26,9 @@ public interface ServiceApi {
     Call<List<Images>> sendVideo(@Part MultipartBody.Part videoFile);
 
     @Streaming
+    @GET("/user/profile")
+    Call<List<Images>> getProfile();
+
     @POST("/user/profile")
-    Call<List<Images>> getProfile(@Body ProfileRequest profileRequest);
+    Call<Void> saveImage(@Body EraseImages images);
 }
